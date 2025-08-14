@@ -33,3 +33,7 @@ def get_lyrics_generator_prompt(description: str):
 
         Lyrics:
     """
+
+
+def get_category_generator_prompt(description: str):
+    return f"Based on the following music description, list 3-5 relevant genres or categories as a comma-separated list. For example: Pop, Electronic, Sad, 80s. Description: {description}"
