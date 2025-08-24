@@ -114,7 +114,7 @@ model Like {
 }
 
 model Category {
-  id        String   @id
+  id        String   @id @default(cuid())
   name      String   @unique
   songs     Song[]
   createdAt DateTime @default(now())
