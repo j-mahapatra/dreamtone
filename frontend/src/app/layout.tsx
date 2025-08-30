@@ -1,3 +1,7 @@
+import { AppSidebar } from "@/components/sidebar/app-sidebar";
+import { Header } from "@/components/header";
+import { Providers } from "@/components/providers";
+import { SidebarInset } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
 import "@/styles/globals.css";
 
@@ -21,8 +25,14 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geist.variable} antialiased`}>
       <body className="flex min-h-svh flex-col">
-        {children}
-        <Toaster />
+        <Providers>
+          <AppSidebar />
+          <SidebarInset className="flex h-screen flex-col">
+            <Header />
+            <main className="flex-1 overflow-auto">{children}</main>
+          </SidebarInset>
+          <Toaster />
+        </Providers>
       </body>
     </html>
   );

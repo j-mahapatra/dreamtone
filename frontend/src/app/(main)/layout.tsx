@@ -13,9 +13,5 @@ export default async function MainLayout({
     redirect("/auth/sign-in");
   }
 
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-center">
-      {children}
-    </main>
-  );
+  return <div>{children}</div>;
 }

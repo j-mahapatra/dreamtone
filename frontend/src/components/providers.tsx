@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import type { ReactNode } from "react";
 
 import { authClient } from "@/lib/auth-client";
+import { SidebarProvider } from "./ui/sidebar";
 
 export function Providers({ children }: { children: ReactNode }) {
   const router = useRouter();
@@ -21,7 +22,7 @@ export function Providers({ children }: { children: ReactNode }) {
       }}
       Link={Link}
     >
-      {children}
+      <SidebarProvider>{children}</SidebarProvider>
     </AuthUIProvider>
   );
 }
