@@ -26,11 +26,7 @@ export default function RootLayout({
     <html lang="en" className={`${geist.variable} antialiased`}>
       <body className="flex min-h-svh flex-col">
         <Providers>
-          <AppSidebar />
-          <SidebarInset className="flex h-screen flex-col">
-            <Header />
-            <main className="flex-1 overflow-auto">{children}</main>
-          </SidebarInset>
+          <main className="flex w-full flex-1">{children}</main>
           <Toaster />
         </Providers>
       </body>
