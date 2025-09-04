@@ -5,13 +5,23 @@ import { useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Loader2, Music2, Pencil, Plus, Settings, Zap } from "lucide-react";
+import {
+  Check,
+  Loader2,
+  Music2,
+  Pencil,
+  Plus,
+  Settings,
+  Zap,
+} from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { lyricStyleTags, sampleSongDescriptions } from "@/lib/constants";
 import { Badge } from "../ui/badge";
 import { Separator } from "../ui/separator";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
+import { createSong, type GenerateRequest } from "@/actions/generation";
 
 type ModeType = "simple" | "custom";
 type LyricsMode = "user-generated" | "auto-generated";
@@ -22,10 +32,77 @@ export function SongPanel() {
   const [instrumental, setInstrumental] = useState<boolean>(false);
   const [lyricsMode, setLyricsMode] = useState<LyricsMode>("user-generated");
   const [lyrics, setLyrics] = useState<string>("");
-  const [styleTags, setStyleTags] = useState<string>("");
+  const [styleTags, setStyleTags] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const generateSong = () => {};
+  const generateSong = async () => {
+    setLoading(true);
+
+    if (mode === "simple" && !description.trim()) {
+      toast.error("Please enter a song description.");
+      setLoading(false);
+      return;
+    }
+
+    if (mode === "custom" && !lyrics.trim()) {
+      toast.error("Please enter lyrics or its description.");
+      setLoading(false);
+      return;
+    }
+
+    if (mode === "custom" && !styleTags.join(", ").trim()) {
+      toast.error("Please enter style tags.");
+      setLoading(false);
+      return;
+    }
+
+    let requestBody: GenerateRequest | null = null;
+
+    if (mode === "simple") {
+      requestBody = {
+        fullSongDescription: description,
+        instrumental: instrumental,
+      };
+    } else {
+      const prompt = styleTags.join(", ");
+
+      if (lyricsMode === "user-generated") {
+        requestBody = {
+          lyrics: lyrics,
+          prompt: prompt,
+          instrumental: instrumental,
+        };
+      } else {
+        requestBody = {
+          lyricsDescription: lyrics,
+          prompt: prompt,
+          instrumental: instrumental,
+        };
+      }
+    }
+
+    try {
+      await createSong(requestBody);
+      setDescription("");
+      setLyrics("");
+      setStyleTags([]);
+      setInstrumental(false);
+      toast.success("Your song is being generated");
+    } catch (error) {
+      toast.error("Failed to generate song");
+    }
+
+    setLoading(false);
+  };
+
+  const handleAddTags = (tag: string) => {
+    if (styleTags.includes(tag)) {
+      const filteredTags = styleTags.filter((t) => t !== tag);
+      setStyleTags(filteredTags);
+    } else {
+      setStyleTags((prev) => [...prev, tag]);
+    }
+  };
 
   return (
     <div className="bg-muted/30 flex h-full w-full flex-col border-r lg:w-80">
@@ -196,8 +273,12 @@ export function SongPanel() {
               <Textarea
                 placeholder={"Enter style tags here."}
                 className="h-20 resize-none overflow-y-auto placeholder:text-xs"
-                value={styleTags}
-                onChange={(event) => setStyleTags(event.target.value)}
+                value={styleTags.join(", ")}
+                onChange={(event) =>
+                  setStyleTags(
+                    event.target.value.split(",").map((tag) => tag.trim()),
+                  )
+                }
                 disabled={loading}
               />
             </div>
@@ -214,14 +295,17 @@ export function SongPanel() {
                       loading
                         ? "cursor-not-allowed"
                         : "hover:bg-accent-foreground hover:text-accent cursor-pointer transition-all duration-300",
+                      styleTags.includes(tag)
+                        ? "!bg-primary !text-primary-foreground"
+                        : "",
                     )}
                     onClick={() => {
                       if (!loading) {
-                        setStyleTags(tag);
+                        handleAddTags(tag);
                       }
                     }}
                   >
-                    <Plus />
+                    {styleTags.includes(tag) ? <Check /> : <Plus />}
                     {tag}
                   </Badge>
                 ))}
