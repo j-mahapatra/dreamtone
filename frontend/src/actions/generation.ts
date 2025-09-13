@@ -1,11 +1,10 @@
 "use server";
 
 import { inngest } from "@/inngest/client";
-import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
+import { getPresignedUrl } from "./aws";
+import { checkAuth } from "./auth";
 
 export type GenerateRequest = {
   prompt?: string;
@@ -14,18 +13,6 @@ export type GenerateRequest = {
   lyricsDescription?: string;
   instrumental?: boolean;
 };
-
-async function checkAuth() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (!session) {
-    redirect("/auth/sign-in");
-  }
-
-  return session;
-}
 
 export async function createSong(generateRequest: GenerateRequest) {
   const session = await checkAuth();
@@ -74,4 +61,40 @@ export async function queueSong(
       userId: song.userId,
     },
   });
+}
+
+export async function getPlayUrl(songId: string): Promise<string> {
+  const session = await checkAuth();
+
+  const song = await db.song.findUniqueOrThrow({
+    where: {
+      id: songId,
+      OR: [
+        {
+          userId: session.user.id,
+        },
+        {
+          published: true,
+        },
+      ],
+      s3Key: {
+        not: null,
+      },
+    },
+  });
+
+  await db.song.update({
+    where: {
+      id: song.id,
+    },
+    data: {
+      listenCount: {
+        increment: 1,
+      },
+    },
+  });
+
+  const presignedUrl = await getPresignedUrl(song.s3Key ?? "");
+
+  return presignedUrl;
 }

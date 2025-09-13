@@ -5,6 +5,15 @@
 import "./src/env.js";
 
 /** @type {import("next").NextConfig} */
-const config = {};
+const config = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "music-generator-jagannath.s3.ap-south-1.amazonaws.com",
+      },
+    ],
+  },
+};
 
 export default config;

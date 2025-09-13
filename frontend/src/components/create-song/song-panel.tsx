@@ -105,8 +105,8 @@ export function SongPanel() {
   };
 
   return (
-    <div className="bg-muted/30 flex h-full w-full flex-col border-r lg:w-80">
-      <div className="h-full flex-1 overflow-y-auto p-4">
+    <div className="bg-muted/30 flex w-full flex-col border-r lg:w-80">
+      <div className="flex-1 overflow-y-auto p-4">
         <Tabs
           value={mode}
           onValueChange={(value) => setMode(value as ModeType)}
@@ -165,8 +165,8 @@ export function SongPanel() {
                   ))}
                 </div>
               </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center">
                   <Tooltip>
                     <TooltipTrigger>
                       <Label

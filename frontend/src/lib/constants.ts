@@ -16,3 +16,11 @@ export const lyricStyleTags = [
   "Uplifting",
   "Somber",
 ];
+
+export const songStatuses = {
+  QUEUED: "queued",
+  FAILED: "failed",
+  PROCESSING: "processing",
+  PROCESSED: "processed",
+  NO_CREDITS: "no-credits",
+};
