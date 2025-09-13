@@ -17,3 +17,18 @@ export async function publishSong(songId: string, published: boolean) {
 
   revalidatePath("/create");
 }
+
+export async function renameSong(songId: string, title: string) {
+  const session = await checkAuth();
+  await db.song.update({
+    where: {
+      id: songId,
+      userId: session.user.id,
+    },
+    data: {
+      title,
+    },
+  });
+
+  revalidatePath("/create");
+}

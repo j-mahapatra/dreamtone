@@ -1,28 +1,40 @@
 "use client";
 
 import {
+  Download,
+  Guitar,
   Link2,
   Link2Off,
   ListMusic,
   LoaderCircle,
   Music,
   Music2,
+  Pencil,
   Play,
   RefreshCw,
   Search,
+  Settings,
   XCircle,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { songStatuses } from "@/lib/constants";
 import Image from "next/image";
 import { getPlayUrl } from "@/actions/generation";
-import { Badge } from "../ui/badge";
-import { publishSong } from "@/actions/song";
+import { Badge } from "@/components/ui/badge";
+import { publishSong, renameSong } from "@/actions/song";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import RenameDialog from "./rename-dialog";
+import { useRouter } from "next/navigation";
 
-interface Song {
+export interface Song {
   id: string;
   title: string | null;
   createdAt: Date;
@@ -39,9 +51,11 @@ interface Song {
 }
 
 export function SongList({ songs }: { songs: Song[] }) {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [loadingSongId, setLoadingSongId] = useState<string | null>(null);
+  const [songToRename, setSongToRename] = useState<Song | null>(null);
 
   const filteredSongs = searchQuery
     ? songs.filter(
@@ -61,6 +75,16 @@ export function SongList({ songs }: { songs: Song[] }) {
     console.log(playUrl);
   };
 
+  const onSongRename = async (songId: string, newTitle: string) => {
+    await renameSong(songId, newTitle);
+  };
+
+  const handleRefresh = async () => {
+    setIsLoading(true);
+    router.refresh();
+    setTimeout(() => setIsLoading(false), 1000);
+  };
+
   return (
     <div className="flex flex-1 flex-col overflow-y-scroll">
       <div className="flex-1 p-6">
@@ -78,6 +102,7 @@ export function SongList({ songs }: { songs: Song[] }) {
             disabled={isLoading}
             variant={"outline"}
             className={cn(!isLoading && "cursor-pointer")}
+            onClick={() => handleRefresh()}
           >
             <RefreshCw className={cn(isLoading && "animate-spin")} />
             Refresh
@@ -198,34 +223,80 @@ export function SongList({ songs }: { songs: Song[] }) {
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Button
-                      size="sm"
-                      variant={song.published ? "destructive" : "outline"}
-                      className={cn(
-                        "cursor-pointer",
-                        song.published && "bg-destructive/70",
-                      )}
-                      onClick={async (e) => {
-                        e.stopPropagation();
-                        await publishSong(song.id, !song.published);
-                      }}
-                    >
-                      {song.published ? (
-                        <Link2Off className="size-4" />
-                      ) : (
-                        <Link2 className="size-4" />
-                      )}
-                      {song.published ? "Unpublish" : "Publish"}
-                    </Button>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger className="cursor-pointer" asChild>
+                        <Button size="sm" variant="outline">
+                          <Settings />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem
+                          className="cursor-pointer"
+                          onClick={async (e) => {
+                            e.stopPropagation();
+                            const url = await getPlayUrl(song.id);
+                            window.open(url, "_blank");
+                          }}
+                        >
+                          <Download className="size-4" />
+                          Download
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          className="cursor-pointer"
+                          onClick={async (e) => {
+                            e.stopPropagation();
+                            setSongToRename(song);
+                          }}
+                        >
+                          <Pencil className="size-4" />
+                          Rename
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={async (e) => {
+                            e.stopPropagation();
+                            await publishSong(song.id, !song.published);
+                          }}
+                          className={cn(
+                            "group cursor-pointer transition-all",
+                            song.published &&
+                              "focus:bg-destructive/70 focus:text-muted",
+                          )}
+                        >
+                          {song.published ? (
+                            <Link2Off className="group-focus:text-muted size-4" />
+                          ) : (
+                            <Link2 className="size-4" />
+                          )}
+                          {song.published ? "Unpublish" : "Publish"}
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </div>
                 </div>
               );
             })
           ) : (
-            <div className="text-muted-foreground">No Songs Found</div>
+            <div className="text-muted-foreground bg-muted/50 flex h-full w-full flex-col items-center justify-center rounded-md p-4">
+              <Guitar className="mb-4 size-16" />
+              <h3 className="font-semibold">No Songs</h3>
+              <p className="flex h-full">
+                {searchQuery
+                  ? "No songs match your search"
+                  : "You don't have any songs yet"}
+              </p>
+            </div>
           )}
         </div>
       </div>
+      {songToRename && (
+        <RenameDialog
+          song={songToRename}
+          onClose={() => {
+            setSongToRename(null);
+          }}
+          onRename={onSongRename}
+        />
+      )}
     </div>
   );
 }
