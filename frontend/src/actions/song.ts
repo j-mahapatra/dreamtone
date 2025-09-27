@@ -32,3 +32,36 @@ export async function renameSong(songId: string, title: string) {
 
   revalidatePath("/create");
 }
+
+export async function updateSongLike(songId: string) {
+  const session = await checkAuth();
+
+  const existingLike = await db.like.findUnique({
+    where: {
+      userId_songId: {
+        songId: songId,
+        userId: session.user.id,
+      },
+    },
+  });
+
+  if (!existingLike) {
+    await db.like.create({
+      data: {
+        userId: session.user.id,
+        songId: songId,
+      },
+    });
+  } else {
+    await db.like.delete({
+      where: {
+        userId_songId: {
+          songId: songId,
+          userId: session.user.id,
+        },
+      },
+    });
+  }
+
+  revalidatePath("/home");
+}
