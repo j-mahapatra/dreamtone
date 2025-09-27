@@ -2,7 +2,7 @@
 
 import { getPlayUrl } from "@/actions/generation";
 import { usePlayerStore } from "@/stores/use-player-store";
-import type { Category, Song, User } from "@prisma/client";
+import type { Category, Like, Song, User } from "@prisma/client";
 import { Heart, LoaderCircle, Music, Play } from "lucide-react";
 import { useState } from "react";
 import { Button } from "../ui/button";
@@ -18,11 +18,14 @@ type SongWithRelation = Song & {
   };
   categories: Category[];
   thumbnailUrl: string | null;
+  likes: Like[];
 };
 export default function SongCard({ song }: { song: SongWithRelation }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const setSong = usePlayerStore((state) => state.setSong);
-  const [isLiked, setIsLiked] = useState(song._count.likes > 0 ? true : false);
+  const [isLiked, setIsLiked] = useState(
+    song.likes ? song.likes.length > 0 : false,
+  );
   const [likesCount, setLikesCount] = useState(song._count.likes);
 
   const likeSong = async (e: React.MouseEvent) => {

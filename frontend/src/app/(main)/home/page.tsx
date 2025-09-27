@@ -19,7 +19,6 @@ export default async function CreatePage() {
 
   const songs = await db.song.findMany({
     where: {
-      userId: userId,
       published: true,
     },
     include: {
@@ -34,6 +33,13 @@ export default async function CreatePage() {
         },
       },
       categories: true,
+      likes: userId
+        ? {
+            where: {
+              userId: userId,
+            },
+          }
+        : false,
     },
     orderBy: {
       createdAt: "desc",
