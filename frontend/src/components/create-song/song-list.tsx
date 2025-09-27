@@ -33,6 +33,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import RenameDialog from "./rename-dialog";
 import { useRouter } from "next/navigation";
+import { usePlayerStore } from "@/stores/use-player-store";
 
 export interface Song {
   id: string;
@@ -56,6 +57,7 @@ export function SongList({ songs }: { songs: Song[] }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [loadingSongId, setLoadingSongId] = useState<string | null>(null);
   const [songToRename, setSongToRename] = useState<Song | null>(null);
+  const setSong = usePlayerStore((state) => state.setSong);
 
   const filteredSongs = searchQuery
     ? songs.filter(
@@ -72,7 +74,14 @@ export function SongList({ songs }: { songs: Song[] }) {
     const playUrl = await getPlayUrl(song.id);
     setLoadingSongId(null);
 
-    console.log(playUrl);
+    setSong({
+      id: song.id,
+      title: song.title,
+      url: playUrl,
+      artwork: song.thumbnailUrl,
+      prompt: song.prompt,
+      createdByUsername: song.createdBy,
+    });
   };
 
   const onSongRename = async (songId: string, newTitle: string) => {

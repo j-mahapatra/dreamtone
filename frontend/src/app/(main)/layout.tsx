@@ -1,5 +1,6 @@
 import { Header } from "@/components/header";
 import { AppSidebar } from "@/components/sidebar/app-sidebar";
+import { Soundbar } from "@/components/soundbar";
 import { SidebarInset } from "@/components/ui/sidebar";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
@@ -23,6 +24,7 @@ export default async function MainLayout({
         <SidebarInset className="flex h-screen flex-col">
           <Header />
           <main className="flex-1 overflow-auto">{children}</main>
+          <Soundbar />
         </SidebarInset>
       </div>
     </div>
