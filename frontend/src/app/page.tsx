@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Music, Music2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import heroImage from "/public/images/hero-image.png";
+import heroImage from "/public/images/hero-image.jpg";
 
 const navbarLinks = [
   { name: "Features", href: "#features" },

@@ -7,6 +7,7 @@ import { type Metadata } from "next";
 export const metadata: Metadata = {
   title: "Dreamtone",
   description: "Generate Music using AI",
+  icons: [{ rel: "icon", url: "/images/favicon.jpg" }],
 };
 
 export default function RootLayout({
