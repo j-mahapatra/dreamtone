@@ -29,7 +29,7 @@ export default function DreamtoneLandingPage() {
             </Link>
           ))}
         </nav>
-        <Link href="/auth/signin" className="ml-4 sm:ml-6">
+        <Link href="/auth/sign-in" className="ml-4 sm:ml-6">
           <Button size="sm" className="cursor-pointer">
             Sign In
           </Button>
