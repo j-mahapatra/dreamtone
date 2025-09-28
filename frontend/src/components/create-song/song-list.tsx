@@ -62,6 +62,7 @@ export function SongList({ songs }: { songs: Song[] }) {
   const filteredSongs = searchQuery
     ? songs.filter(
         (song) =>
+          // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
           song.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
           song.prompt?.toLowerCase().includes(searchQuery.toLowerCase()),
       )
