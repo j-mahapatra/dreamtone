@@ -171,7 +171,7 @@ export function SongPanel() {
                     <TooltipTrigger>
                       <Label
                         htmlFor="instrumental-toggle"
-                        className={cn(loading ? "" : "cursor-pointer")}
+                        className={cn("mr-1", loading ? "" : "cursor-pointer")}
                       >
                         Instrumental Mode
                       </Label>
