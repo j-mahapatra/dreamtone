@@ -1,3 +1,4 @@
+import CustomerPortalRedirect from "@/components/customer-portal-redirect";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
@@ -11,5 +12,5 @@ export default async function CustomerPortalPage() {
     redirect("/auth/sign-in");
   }
 
-  return <CustomerPortalPage />;
+  return <CustomerPortalRedirect />;
 }

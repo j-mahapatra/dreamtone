@@ -1,4 +1,4 @@
-import { User } from "lucide-react";
+import { Music, User } from "lucide-react";
 import { UserButton } from "@daveyplate/better-auth-ui";
 import {
   Sidebar,
@@ -13,14 +13,18 @@ import { Separator } from "@/components/ui/separator";
 import { SidebarMenuItems } from "./sidebar-menu-item";
 import { CreditLimit } from "./credit-limit";
 import { UpgradeUser } from "./upgrade-user";
+import Link from "next/link";
 
 export function AppSidebar() {
   return (
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className="my-[2px] text-2xl font-semibold">
-            Music Generator
+          <SidebarGroupLabel>
+            <Link className="flex items-center justify-center" href="/home">
+              <Music className="text-primary h-6 w-6" />
+              <span className="ml-2 text-lg font-bold">Dreamtone</span>
+            </Link>
           </SidebarGroupLabel>
           <Separator orientation="horizontal" className="my-2" />
           <SidebarGroupContent>
@@ -35,7 +39,17 @@ export function AppSidebar() {
           <CreditLimit />
           <UpgradeUser />
         </div>
-        <UserButton variant={"outline"} className="cursor-pointer" />
+        <UserButton
+          variant={"outline"}
+          additionalLinks={[
+            {
+              label: "Customer Portal",
+              href: "/customer-portal",
+              icon: <User />,
+            },
+          ]}
+          className="cursor-pointer"
+        />
       </SidebarFooter>
     </Sidebar>
   );
