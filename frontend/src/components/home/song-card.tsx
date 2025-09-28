@@ -1,13 +1,13 @@
 "use client";
 
 import { getPlayUrl } from "@/actions/generation";
+import { updateSongLike } from "@/actions/song";
+import { cn } from "@/lib/utils";
 import { usePlayerStore } from "@/stores/use-player-store";
-import type { Category, Like, Song, User } from "@prisma/client";
+import type { Category, Like, Song } from "@prisma/client";
 import { Heart, LoaderCircle, Music, Play } from "lucide-react";
 import { useState } from "react";
 import { Button } from "../ui/button";
-import { cn } from "@/lib/utils";
-import { updateSongLike } from "@/actions/song";
 
 type SongWithRelation = Song & {
   User: {

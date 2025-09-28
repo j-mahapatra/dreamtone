@@ -1,19 +1,18 @@
 "use client";
 
-import { useState } from "react";
-import type { Song } from "./song-list";
 import {
   Dialog,
   DialogClose,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import type { Song } from "./song-list";
 
 export default function RenameDialog({
   song,

@@ -1,5 +1,4 @@
-import { Music, User } from "lucide-react";
-import { UserButton } from "@daveyplate/better-auth-ui";
+import { Separator } from "@/components/ui/separator";
 import {
   Sidebar,
   SidebarContent,
@@ -9,11 +8,12 @@ import {
   SidebarGroupLabel,
   SidebarMenu,
 } from "@/components/ui/sidebar";
-import { Separator } from "@/components/ui/separator";
-import { SidebarMenuItems } from "./sidebar-menu-item";
-import { CreditLimit } from "./credit-limit";
-import { UpgradeUser } from "./upgrade-user";
+import { UserButton } from "@daveyplate/better-auth-ui";
+import { Music, User } from "lucide-react";
 import Link from "next/link";
+import { CreditLimit } from "./credit-limit";
+import { SidebarMenuItems } from "./sidebar-menu-item";
+import { UpgradeUser } from "./upgrade-user";
 
 export function AppSidebar() {
   return (
