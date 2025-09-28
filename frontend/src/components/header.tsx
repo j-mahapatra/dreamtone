@@ -36,16 +36,18 @@ export function Header() {
                 {"Home"}
               </BreadcrumbLink>
             </BreadcrumbItem>
-            {items.map((item) => (
-              <div key={item} className="flex items-center space-x-2">
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                  <BreadcrumbLink asChild={false} href={`/${item}`}>
-                    {capitalizeFirstLetter(item)}
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-              </div>
-            ))}
+            {items.map((item) =>
+              item === "home" ? null : (
+                <div key={item} className="flex items-center space-x-2">
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem>
+                    <BreadcrumbLink asChild={false} href={`/${item}`}>
+                      {capitalizeFirstLetter(item)}
+                    </BreadcrumbLink>
+                  </BreadcrumbItem>
+                </div>
+              ),
+            )}
           </BreadcrumbList>
         </Breadcrumb>
       </div>
