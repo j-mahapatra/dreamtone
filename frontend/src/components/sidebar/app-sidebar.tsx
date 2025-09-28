@@ -35,17 +35,7 @@ export function AppSidebar() {
           <CreditLimit />
           <UpgradeUser />
         </div>
-        <UserButton
-          variant={"outline"}
-          additionalLinks={[
-            {
-              label: "Customer Portal",
-              href: "/customer-portal",
-              icon: <User />,
-            },
-          ]}
-          className="cursor-pointer"
-        />
+        <UserButton variant={"outline"} className="cursor-pointer" />
       </SidebarFooter>
     </Sidebar>
   );

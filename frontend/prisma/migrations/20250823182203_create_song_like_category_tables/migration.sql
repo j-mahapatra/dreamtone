@@ -1,5 +1,5 @@
 -- AlterTable
-ALTER TABLE "public"."user" ADD COLUMN     "credits" INTEGER NOT NULL DEFAULT 100;
+ALTER TABLE "public"."user" ADD COLUMN     "credits" INTEGER NOT NULL DEFAULT 5;
 
 -- CreateTable
 CREATE TABLE "public"."song" (
