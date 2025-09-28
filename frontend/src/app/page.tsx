@@ -2,7 +2,9 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Music, Music2 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
+import heroImage from "/public/images/hero-image.png";
 
 const navbarLinks = [
   { name: "Features", href: "#features" },
@@ -60,10 +62,12 @@ export default function DreamtoneLandingPage() {
                   </Link>
                 </div>
               </div>
-              <img
+              <Image
                 alt="Hero"
                 className="mx-auto aspect-video overflow-hidden rounded-xl object-cover sm:w-full lg:order-last lg:aspect-square"
-                src={"/hero-image.png"}
+                src={heroImage}
+                width={550}
+                height={550}
               />
             </div>
           </div>
