@@ -1,7 +1,7 @@
 # DreamTone 🎵
 
 <p align="center">
-  <img src="./frontend/public/images/hero-image.png" alt="DreamTone Logo" width="300"/>
+  <img src="./frontend/public/images/hero-image.jpg" alt="DreamTone Logo" width="300"/>
 </p>
 
 <p align="center">
